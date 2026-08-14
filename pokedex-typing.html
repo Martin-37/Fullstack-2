@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pokédex · Tipeo Kanto</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --shell-red: #d81f2a;
+    --shell-red-dark: #a8141d;
+    --shell-red-darker: #7c0e14;
+    --screen-bg: #9bbc8f;
+    --screen-bg-dark: #7fa876;
+    --screen-ink: #1c2b1a;
+    --cream: #eee6d3;
+    --lens-blue: #3a6fd8;
+    --lens-blue-light: #8fb8ff;
+    --gold: #ffcb3c;
+    --grid-line: rgba(28,43,26,0.15);
+    --font-pixel: 'Press Start 2P', monospace;
+    --font-body: 'Space Grotesk', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    min-height:100vh;
+    background:
+      radial-gradient(circle at 20% 10%, #3a3f52 0%, transparent 45%),
+      radial-gradient(circle at 85% 90%, #2b2140 0%, transparent 50%),
+      #16151f;
+    font-family:var(--font-body);
+    color:var(--cream);
+    padding:28px 16px 60px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:26px;
+  }
+
+  .title-block{
+    text-align:center;
+    max-width:640px;
+  }
+  .eyebrow{
+    font-family:var(--font-mono);
+    font-size:11px;
+    letter-spacing:0.35em;
+    text-transform:uppercase;
+    color:var(--lens-blue-light);
+    margin-bottom:10px;
+  }
+  h1{
+    font-family:var(--font-pixel);
+    font-size:22px;
+    line-height:1.6;
+    margin:0 0 8px;
+    color:var(--cream);
+    text-shadow:3px 3px 0 var(--shell-red-darker);
+  }
+  .subtitle{
+    font-size:14px;
+    color:#b9b6c9;
+    line-height:1.5;
+    margin:0;
+  }
+
+  /* ===== POKEDEX SHELL ===== */
+  .dex-shell{
+    width:100%;
+    max-width:520px;
+    background:linear-gradient(145deg, var(--shell-red) 0%, var(--shell-red-dark) 70%, var(--shell-red-darker) 100%);
+    border-radius:22px;
+    padding:20px 20px 26px;
+    box-shadow:
+      0 0 0 3px var(--shell-red-darker),
+      0 18px 40px -12px rgba(0,0,0,0.6),
+      inset 0 2px 0 rgba(255,255,255,0.15);
+    position:relative;
+  }
+  .dex-shell::before{
+    content:"";
+    position:absolute;
+    left:14px; top:14px; bottom:14px;
+    width:6px;
+    border-radius:4px;
+    background:rgba(0,0,0,0.2);
+  }
+
+  .dex-top{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    margin-bottom:14px;
+    padding-left:8px;
+  }
+  .lens{
+    width:46px;height:46px;border-radius:50%;
+    background: radial-gradient(circle at 32% 28%, #cfe4ff 0%, var(--lens-blue-light) 18%, var(--lens-blue) 55%, #1c3f88 100%);
+    box-shadow: 0 0 0 4px #eef3fb, 0 0 0 6px var(--shell-red-darker), 0 4px 10px rgba(0,0,0,0.4);
+    position:relative;
+    transition: box-shadow 0.4s ease;
+  }
+  .lens.pulse{
+    animation: lensPulse 1.6s ease-in-out infinite;
+  }
+  @keyframes lensPulse{
+    0%,100%{ box-shadow: 0 0 0 4px #eef3fb, 0 0 0 6px var(--shell-red-darker), 0 0 14px 4px rgba(143,184,255,0.7);}
+    50%{ box-shadow: 0 0 0 4px #eef3fb, 0 0 0 6px var(--shell-red-darker), 0 0 22px 8px rgba(143,184,255,0.95);}
+  }
+  .status-lights{display:flex; gap:8px;}
+  .status-lights .light{
+    width:11px;height:11px;border-radius:50%;
+    background:#4a1116;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.6);
+    transition: all 0.5s ease;
+  }
+  .status-lights .light.on-red{ background:#ff4d4d; box-shadow:0 0 8px 2px rgba(255,77,77,0.85), inset 0 1px 2px rgba(0,0,0,0.3);}
+  .status-lights .light.on-yellow{ background:#ffd23c; box-shadow:0 0 8px 2px rgba(255,210,60,0.85), inset 0 1px 2px rgba(0,0,0,0.3);}
+  .status-lights .light.on-green{ background:#4ce07a; box-shadow:0 0 8px 2px rgba(76,224,122,0.85), inset 0 1px 2px rgba(0,0,0,0.3);}
+
+  .dex-mode{
+    margin-left:auto;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    background:rgba(0,0,0,0.18);
+    padding:6px 10px;
+    border-radius:20px;
+  }
+  .dex-mode span{
+    font-family:var(--font-mono);
+    font-size:10px;
+    letter-spacing:0.05em;
+    color:#ffe0c9;
+  }
+  .switch{
+    width:38px;height:20px;
+    background:rgba(0,0,0,0.35);
+    border-radius:12px;
+    position:relative;
+    cursor:pointer;
+    border:1px solid rgba(0,0,0,0.4);
+    flex-shrink:0;
+  }
+  .switch .knob{
+    position:absolute;
+    top:2px; left:2px;
+    width:14px;height:14px;
+    border-radius:50%;
+    background:var(--gold);
+    transition: transform 0.25s ease;
+    box-shadow:0 1px 3px rgba(0,0,0,0.5);
+  }
+  .switch.active .knob{ transform: translateX(18px); background:#8fb8ff;}
+
+  /* Screen */
+  .screen-frame{
+    background:var(--shell-red-darker);
+    border-radius:12px;
+    padding:12px;
+    box-shadow: inset 0 3px 8px rgba(0,0,0,0.5);
+  }
+  .screen{
+    background:
+      repeating-linear-gradient(0deg, rgba(0,0,0,0.06) 0px, rgba(0,0,0,0.06) 1px, transparent 1px, transparent 3px),
+      linear-gradient(160deg, var(--screen-bg) 0%, var(--screen-bg-dark) 100%);
+    border-radius:6px;
+    min-height:200px;
+    padding:18px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    position:relative;
+    overflow:hidden;
+  }
+  .screen-readout{
+    position:absolute;
+    top:8px; left:10px; right:10px;
+    display:flex;
+    justify-content:space-between;
+    font-family:var(--font-mono);
+    font-size:11px;
+    color:var(--screen-ink);
+    opacity:0.75;
+  }
+  .sprite-wrap{
+    width:96px;height:96px;
+    display:flex;align-items:center;justify-content:center;
+    image-rendering:pixelated;
+  }
+  .sprite-wrap img{
+    width:96px;height:96px;
+    image-rendering:pixelated;
+    filter:drop-shadow(0 4px 3px rgba(0,0,0,0.25));
+    animation: popIn 0.35s ease;
+  }
+  @keyframes popIn{
+    0%{ transform:scale(0.4); opacity:0; }
+    70%{ transform:scale(1.08); opacity:1; }
+    100%{ transform:scale(1); }
+  }
+  .screen-name{
+    font-family:var(--font-pixel);
+    font-size:14px;
+    color:var(--screen-ink);
+    text-align:center;
+    letter-spacing:0.03em;
+  }
+  .screen-num{
+    font-family:var(--font-mono);
+    font-size:12px;
+    color:var(--screen-ink);
+    opacity:0.8;
+  }
+  .screen-placeholder{
+    font-family:var(--font-mono);
+    font-size:12px;
+    color:var(--screen-ink);
+    opacity:0.6;
+    text-align:center;
+    max-width:220px;
+    line-height:1.5;
+  }
+  .screen-hint{
+    font-family:var(--font-mono);
+    font-size:11px;
+    color:var(--screen-ink);
+    opacity:0.85;
+    background:rgba(0,0,0,0.08);
+    padding:4px 10px;
+    border-radius:10px;
+  }
+
+  /* Controls */
+  .controls{
+    margin-top:16px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+  .counter-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    font-family:var(--font-mono);
+    font-size:12px;
+    color:var(--cream);
+    padding:0 4px;
+  }
+  .counter-row b{
+    font-family:var(--font-pixel);
+    font-size:13px;
+    color:var(--gold);
+  }
+  .timer-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    font-family:var(--font-mono);
+    font-size:12px;
+    color:var(--cream);
+    padding:0 4px;
+  }
+  .timer-row b{
+    font-family:var(--font-pixel);
+    font-size:13px;
+    color:var(--lens-blue-light);
+    letter-spacing:0.05em;
+  }
+  .progress-track{
+    height:8px;
+    border-radius:6px;
+    background:rgba(0,0,0,0.28);
+    overflow:hidden;
+    margin:0 4px 4px;
+  }
+  .progress-fill{
+    height:100%;
+    background:linear-gradient(90deg, #ffd23c, #4ce07a);
+    width:0%;
+    transition:width 0.4s ease;
+  }
+
+  .input-row{
+    display:flex;
+    gap:8px;
+    padding:0 4px;
+  }
+  .input-row input{
+    flex:1;
+    font-family:var(--font-mono);
+    font-size:15px;
+    padding:12px 14px;
+    border-radius:10px;
+    border:2px solid var(--shell-red-darker);
+    background:var(--cream);
+    color:var(--screen-ink);
+    outline:none;
+    transition: box-shadow 0.15s ease, border-color 0.15s ease;
+  }
+  .input-row input:focus{
+    box-shadow:0 0 0 3px var(--lens-blue-light);
+  }
+  .input-row input.shake{
+    animation: shake 0.35s;
+    border-color:#ff6b6b;
+  }
+  .input-row input.flash-good{
+    border-color:#4ce07a;
+  }
+  @keyframes shake{
+    0%,100%{ transform:translateX(0); }
+    25%{ transform:translateX(-6px); }
+    75%{ transform:translateX(6px); }
+  }
+  .input-row button{
+    font-family:var(--font-mono);
+    font-weight:600;
+    font-size:13px;
+    padding:0 16px;
+    border-radius:10px;
+    border:2px solid var(--shell-red-darker);
+    background:var(--gold);
+    color:#3a2400;
+    cursor:pointer;
+  }
+  .input-row button:active{ transform:translateY(1px); }
+
+  .feedback-line{
+    min-height:16px;
+    font-family:var(--font-mono);
+    font-size:11px;
+    padding:0 6px;
+    color:#ffe0c9;
+  }
+  .feedback-line.ok{ color:#8fffb0; }
+  .feedback-line.bad{ color:#ffb0b0; }
+
+  .bottom-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:0 4px;
+    margin-top:2px;
+  }
+  .reset-btn{
+    font-family:var(--font-mono);
+    font-size:11px;
+    background:none;
+    border:1px solid rgba(255,255,255,0.35);
+    color:#ffe0c9;
+    padding:6px 10px;
+    border-radius:8px;
+    cursor:pointer;
+  }
+  .reset-btn:hover{ background:rgba(255,255,255,0.08); }
+  .done-msg{
+    font-family:var(--font-pixel);
+    font-size:10px;
+    color:var(--gold);
+    display:none;
+  }
+  .done-msg.show{ display:block; }
+
+  /* ===== GRID ===== */
+  .grid-panel{
+    width:100%;
+    max-width:900px;
+  }
+  .grid-panel h2{
+    font-family:var(--font-mono);
+    font-size:12px;
+    letter-spacing:0.2em;
+    text-transform:uppercase;
+    color:#b9b6c9;
+    margin:0 0 12px 4px;
+  }
+  .dex-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(64px, 1fr));
+    gap:8px;
+  }
+  .dex-cell{
+    aspect-ratio:1;
+    background:#221f30;
+    border:1px solid #35304a;
+    border-radius:10px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:2px;
+    position:relative;
+    transition: border-color 0.2s ease, background 0.2s ease;
+  }
+  .dex-cell.caught{
+    background:#2c2440;
+    border-color:var(--gold);
+  }
+  .dex-cell img{
+    width:36px;height:36px;
+    image-rendering:pixelated;
+    filter:brightness(0);
+    opacity:0.35;
+  }
+  .dex-cell.caught img{
+    filter:none;
+    opacity:1;
+  }
+  .dex-cell .cell-num{
+    font-family:var(--font-mono);
+    font-size:9px;
+    color:#7a758f;
+  }
+  .dex-cell.caught .cell-num{ color:var(--gold); }
+  .dex-cell.next-target{
+    border-color:var(--lens-blue-light);
+    box-shadow:0 0 0 2px rgba(143,184,255,0.4);
+  }
+
+  footer{
+    color:#5f5c74;
+    font-family:var(--font-mono);
+    font-size:11px;
+    text-align:center;
+    margin-top:6px;
+  }
+
+  @media (max-width:480px){
+    h1{ font-size:16px; }
+    .dex-top{ flex-wrap:wrap; }
+    .dex-mode{ margin-left:0; order:3; width:100%; justify-content:center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="title-block">
+  <div class="eyebrow">Kanto · 001&ndash;151</div>
+  <h1>POKÉDEX DE TIPEO</h1>
+  <p class="subtitle">Escribí el nombre de cada Pokémon tal como se escribe. Si es correcto, se revela en la pantalla y se marca en la grilla.</p>
+</div>
+
+<div class="dex-shell">
+  <div class="dex-top">
+    <div class="lens" id="lens"></div>
+    <div class="status-lights">
+      <div class="light" id="lightRed"></div>
+      <div class="light" id="lightYellow"></div>
+      <div class="light" id="lightGreen"></div>
+    </div>
+    <div class="dex-mode">
+      <span id="modeLabel">LIBRE</span>
+      <div class="switch" id="modeSwitch"><div class="knob"></div></div>
+    </div>
+  </div>
+
+  <div class="screen-frame">
+    <div class="screen">
+      <div class="screen-readout"><span>REG.</span><span id="readoutStatus">ESPERANDO</span></div>
+      <div id="screenContent">
+        <div class="screen-placeholder">Escribí un nombre y presioná Enter para empezar a completar la Pokédex.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <div class="counter-row">
+      <span>ATRAPADOS</span>
+      <b id="counterText">0 / 151</b>
+    </div>
+    <div class="timer-row">
+      <span>TIEMPO</span>
+      <b id="timerText">00:00</b>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+
+    <div class="input-row">
+      <input id="nameInput" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="ej: Pikachu">
+      <button id="submitBtn">Atrapar</button>
+    </div>
+    <div class="feedback-line" id="feedbackLine"></div>
+
+    <div class="bottom-row">
+      <button class="reset-btn" id="resetBtn">Reiniciar Pokédex</button>
+      <span class="done-msg" id="doneMsg">¡POKÉDEX COMPLETA!</span>
+    </div>
+  </div>
+</div>
+
+<div class="grid-panel">
+  <h2>Registro Nacional</h2>
+  <div class="dex-grid" id="dexGrid"></div>
+</div>
+
+<footer>151/151 · Los nombres se comparan sin tildes, mayúsculas ni símbolos.</footer>
+
+<script>
+(function(){
+  const POKEMON = [
+    [1,"Bulbasaur"],[2,"Ivysaur"],[3,"Venusaur"],[4,"Charmander"],[5,"Charmeleon"],
+    [6,"Charizard"],[7,"Squirtle"],[8,"Wartortle"],[9,"Blastoise"],[10,"Caterpie"],
+    [11,"Metapod"],[12,"Butterfree"],[13,"Weedle"],[14,"Kakuna"],[15,"Beedrill"],
+    [16,"Pidgey"],[17,"Pidgeotto"],[18,"Pidgeot"],[19,"Rattata"],[20,"Raticate"],
+    [21,"Spearow"],[22,"Fearow"],[23,"Ekans"],[24,"Arbok"],[25,"Pikachu"],
+    [26,"Raichu"],[27,"Sandshrew"],[28,"Sandslash"],[29,"Nidoran ♀",{alias:"nidoranf"}],
+    [30,"Nidorina"],[31,"Nidoqueen"],[32,"Nidoran ♂",{alias:"nidoranm"}],[33,"Nidorino"],
+    [34,"Nidoking"],[35,"Clefairy"],[36,"Clefable"],[37,"Vulpix"],[38,"Ninetales"],
+    [39,"Jigglypuff"],[40,"Wigglytuff"],[41,"Zubat"],[42,"Golbat"],[43,"Oddish"],
+    [44,"Gloom"],[45,"Vileplume"],[46,"Paras"],[47,"Parasect"],[48,"Venonat"],
+    [49,"Venomoth"],[50,"Diglett"],[51,"Dugtrio"],[52,"Meowth"],[53,"Persian"],
+    [54,"Psyduck"],[55,"Golduck"],[56,"Mankey"],[57,"Primeape"],[58,"Growlithe"],
+    [59,"Arcanine"],[60,"Poliwag"],[61,"Poliwhirl"],[62,"Poliwrath"],[63,"Abra"],
+    [64,"Kadabra"],[65,"Alakazam"],[66,"Machop"],[67,"Machoke"],[68,"Machamp"],
+    [69,"Bellsprout"],[70,"Weepinbell"],[71,"Victreebel"],[72,"Tentacool"],[73,"Tentacruel"],
+    [74,"Geodude"],[75,"Graveler"],[76,"Golem"],[77,"Ponyta"],[78,"Rapidash"],
+    [79,"Slowpoke"],[80,"Slowbro"],[81,"Magnemite"],[82,"Magneton"],[83,"Farfetch'd"],
+    [84,"Doduo"],[85,"Dodrio"],[86,"Seel"],[87,"Dewgong"],[88,"Grimer"],
+    [89,"Muk"],[90,"Shellder"],[91,"Cloyster"],[92,"Gastly"],[93,"Haunter"],
+    [94,"Gengar"],[95,"Onix"],[96,"Drowzee"],[97,"Hypno"],[98,"Krabby"],
+    [99,"Kingler"],[100,"Voltorb"],[101,"Electrode"],[102,"Exeggcute"],[103,"Exeggutor"],
+    [104,"Cubone"],[105,"Marowak"],[106,"Hitmonlee"],[107,"Hitmonchan"],[108,"Lickitung"],
+    [109,"Koffing"],[110,"Weezing"],[111,"Rhyhorn"],[112,"Rhydon"],[113,"Chansey"],
+    [114,"Tangela"],[115,"Kangaskhan"],[116,"Horsea"],[117,"Seadra"],[118,"Goldeen"],
+    [119,"Seaking"],[120,"Staryu"],[121,"Starmie"],[122,"Mr. Mime"],[123,"Scyther"],
+    [124,"Jynx"],[125,"Electabuzz"],[126,"Magmar"],[127,"Pinsir"],[128,"Tauros"],
+    [129,"Magikarp"],[130,"Gyarados"],[131,"Lapras"],[132,"Ditto"],[133,"Eevee"],
+    [134,"Vaporeon"],[135,"Jolteon"],[136,"Flareon"],[137,"Porygon"],[138,"Omanyte"],
+    [139,"Omastar"],[140,"Kabuto"],[141,"Kabutops"],[142,"Aerodactyl"],[143,"Snorlax"],
+    [144,"Articuno"],[145,"Zapdos"],[146,"Moltres"],[147,"Dratini"],[148,"Dragonair"],
+    [149,"Dragonite"],[150,"Mewtwo"],[151,"Mew"]
+  ].map(function(row){
+    var num = row[0], name = row[1], opts = row[2] || {};
+    return {
+      num: num,
+      name: name,
+      alias: opts.alias || normalize(name),
+      sprite: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/" + num + ".png"
+    };
+  });
+
+  function normalize(s){
+    return s.toLowerCase()
+      .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+      .replace(/[^a-z0-9]/g,'');
+  }
+
+  var byAlias = {};
+  POKEMON.forEach(function(p){ byAlias[p.alias] = p; });
+
+  var caught = new Set(); // set of nums
+  var pokedexMode = false; // false = libre, true = orden pokedex
+
+  var timerInterval = null;
+  var timerStart = null;
+  var elapsedSeconds = 0;
+
+  function formatTime(totalSeconds){
+    var m = Math.floor(totalSeconds/60);
+    var s = totalSeconds%60;
+    return String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+  }
+
+  function startTimer(){
+    if(timerInterval) return;
+    timerStart = Date.now() - elapsedSeconds*1000;
+    timerInterval = setInterval(function(){
+      elapsedSeconds = Math.floor((Date.now() - timerStart)/1000);
+      els.timerText.textContent = formatTime(elapsedSeconds);
+    }, 250);
+  }
+
+  function stopTimer(){
+    if(timerInterval){ clearInterval(timerInterval); timerInterval = null; }
+  }
+
+  function resetTimer(){
+    stopTimer();
+    elapsedSeconds = 0;
+    els.timerText.textContent = formatTime(0);
+  }
+
+  var els = {
+    input: document.getElementById('nameInput'),
+    submitBtn: document.getElementById('submitBtn'),
+    feedback: document.getElementById('feedbackLine'),
+    counter: document.getElementById('counterText'),
+    timerText: document.getElementById('timerText'),
+    progress: document.getElementById('progressFill'),
+    screenContent: document.getElementById('screenContent'),
+    readoutStatus: document.getElementById('readoutStatus'),
+    grid: document.getElementById('dexGrid'),
+    modeSwitch: document.getElementById('modeSwitch'),
+    modeLabel: document.getElementById('modeLabel'),
+    lens: document.getElementById('lens'),
+    lightRed: document.getElementById('lightRed'),
+    lightYellow: document.getElementById('lightYellow'),
+    lightGreen: document.getElementById('lightGreen'),
+    resetBtn: document.getElementById('resetBtn'),
+    doneMsg: document.getElementById('doneMsg')
+  };
+
+  function buildGrid(){
+    els.grid.innerHTML = '';
+    POKEMON.forEach(function(p){
+      var cell = document.createElement('div');
+      cell.className = 'dex-cell';
+      cell.id = 'cell-' + p.num;
+      cell.innerHTML =
+        '<img src="' + p.sprite + '" alt="">' +
+        '<span class="cell-num">#' + String(p.num).padStart(3,'0') + '</span>';
+      els.grid.appendChild(cell);
+    });
+  }
+
+  function nextExpectedNum(){
+    for(var i=0;i<POKEMON.length;i++){
+      if(!caught.has(POKEMON[i].num)) return POKEMON[i].num;
+    }
+    return null;
+  }
+
+  function updateHUD(){
+    els.counter.textContent = caught.size + ' / 151';
+    els.progress.style.width = (caught.size/151*100) + '%';
+
+    document.querySelectorAll('.next-target').forEach(function(el){ el.classList.remove('next-target'); });
+    if(pokedexMode){
+      var nxt = nextExpectedNum();
+      if(nxt){
+        var c = document.getElementById('cell-'+nxt);
+        if(c) c.classList.add('next-target');
+      }
+    }
+
+    // status lights by milestone
+    els.lightRed.className = 'light' + (caught.size>0 ? ' on-red':'');
+    els.lightYellow.className = 'light' + (caught.size>=75 ? ' on-yellow':'');
+    els.lightGreen.className = 'light' + (caught.size>=151 ? ' on-green':'');
+    els.lens.classList.toggle('pulse', caught.size>0 && caught.size<151);
+
+    if(caught.size>=151){
+      els.readoutStatus.textContent = 'COMPLETO';
+      els.doneMsg.classList.add('show');
+    } else {
+      els.readoutStatus.textContent = pokedexMode ? 'ORDEN DEX' : 'LIBRE';
+      els.doneMsg.classList.remove('show');
+    }
+  }
+
+  function showOnScreen(p){
+    els.screenContent.innerHTML =
+      '<div class="sprite-wrap"><img src="'+p.sprite+'" alt="'+p.name+'"></div>' +
+      '<div class="screen-name">'+p.name+'</div>' +
+      '<div class="screen-num">N.º '+String(p.num).padStart(3,'0')+'</div>';
+  }
+
+  function setFeedback(msg, kind){
+    els.feedback.textContent = msg;
+    els.feedback.className = 'feedback-line' + (kind ? ' '+kind : '');
+  }
+
+  function flashInput(kind){
+    els.input.classList.remove('shake','flash-good');
+    void els.input.offsetWidth;
+    els.input.classList.add(kind === 'good' ? 'flash-good' : 'shake');
+  }
+
+  function markCell(num){
+    var c = document.getElementById('cell-'+num);
+    if(c) c.classList.add('caught');
+  }
+
+  function attempt(){
+    var raw = els.input.value;
+    if(!raw.trim()){ return; }
+    var norm = normalize(raw);
+    var match = byAlias[norm];
+
+    // "nidoran" alone can mean either the female (#29) or male (#32) form.
+    if(!match && norm === 'nidoran'){
+      var fem = byAlias['nidoranf'], masc = byAlias['nidoranm'];
+      if(!caught.has(fem.num)) match = fem;
+      else if(!caught.has(masc.num)) match = masc;
+      else match = fem; // both already caught -> falls into the "already registered" branch below
+    }
+
+    if(!match){
+      setFeedback('No reconozco ese nombre. Revisá la ortografía.', 'bad');
+      flashInput('bad');
+      return;
+    }
+    if(caught.has(match.num)){
+      setFeedback(match.name + ' ya estaba registrado.', 'bad');
+      flashInput('bad');
+      els.input.select();
+      return;
+    }
+    if(pokedexMode){
+      var expected = nextExpectedNum();
+      if(match.num !== expected){
+        var expectedName = expected ? '#' + String(expected).padStart(3,'0') : '';
+        setFeedback('En orden Pokédex, ahora toca ' + expectedName + '.', 'bad');
+        flashInput('bad');
+        return;
+      }
+    }
+
+    if(caught.size === 0){ startTimer(); }
+    caught.add(match.num);
+    markCell(match.num);
+    showOnScreen(match);
+    updateHUD();
+    if(caught.size >= 151){ stopTimer(); }
+    setFeedback(match.name + ' registrado (#' + String(match.num).padStart(3,'0') + ').', 'ok');
+    flashInput('good');
+    els.input.value = '';
+    els.input.focus();
+  }
+
+  els.submitBtn.addEventListener('click', attempt);
+  els.input.addEventListener('keydown', function(e){
+    if(e.key === 'Enter') attempt();
+  });
+
+  els.modeSwitch.addEventListener('click', function(){
+    pokedexMode = !pokedexMode;
+    els.modeSwitch.classList.toggle('active', pokedexMode);
+    els.modeLabel.textContent = pokedexMode ? 'DEX' : 'LIBRE';
+    setFeedback(pokedexMode ? 'Modo orden Pokédex: empezá por #001 Bulbasaur.' : 'Modo libre: escribí en cualquier orden.', '');
+    updateHUD();
+  });
+
+  els.resetBtn.addEventListener('click', function(){
+    caught.clear();
+    resetTimer();
+    buildGrid();
+    els.screenContent.innerHTML = '<div class="screen-placeholder">Escribí un nombre y presioná Enter para empezar a completar la Pokédex.</div>';
+    setFeedback('Pokédex reiniciada.', '');
+    updateHUD();
+    els.input.value='';
+    els.input.focus();
+  });
+
+  buildGrid();
+  updateHUD();
+})();
+</script>
+
+</body>
+</html>
