@@ -12,14 +12,15 @@
         integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
         crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    
 </head>
 
 <body>
     <header>
-        <!--barra de navegacion-->
-        <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <!--barra de navegacion navbar-->
+        <nav class="navbar navbar-expand body-tertiary"data-bs-theme="dark">
             <div class="container-fluid">
-                <a class="navbar-brand titulo" href="#"> PlayRoute <img src="https://i.redd.it/t64efwcviqo51.png" width="30" height="30"> </a>
+                <a class="navbar-brand titulo " href="#"> PlayRoute <img src="https://i.redd.it/t64efwcviqo51.png" width="30" height="30"> </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
@@ -28,20 +29,20 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#"> Inicio </a>
+                            <a class="nav-link active " aria-current="page" href="#"> Inicio </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#"> Juegos </a>
+                            <a class="nav-link " href="#"> Juegos </a>
                         </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                        <li class="nav-item dropdown ">
+                            <a class="nav-link dropdown-toggle texto" href="#" role="button" data-bs-toggle="dropdown"
                                 aria-expanded="false">
                                 Categorias
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Acción</a></li>
-                                <li><a class="dropdown-item" href="#">Aventura</a></li>
-                                <li><a class = "dropdown-item" href="#">Estrategia</a></li>
+                                <li><a class="dropdown-item " href="#">Acción</a></li>
+                                <li><a class="dropdown-item " href="#">Aventura</a></li>
+                                <li><a class = "dropdown-item " href="#">Estrategia</a></li>
                                 <li><a class = "dropdown-item" href="#">Terror</a></li>
 
                                 <li>
@@ -51,7 +52,7 @@
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Contacto</a>
+                            <a class="nav-link " href="#">Contacto</a>
                         </li>
                     </ul>
                     <form class="d-flex" role="search">
@@ -63,7 +64,7 @@
         </nav>
 
     </header>
-    <!--esto es para los juegos-->
+    <!--esto es para los juegos contenedor -->
     <div class="imagenes">
         <div class="card" style="width: 22rem;">
             <img src="https://pbs.twimg.com/profile_images/2089698780060778496/OrEsKDXH_400x400.jpg" class="card-img-top" alt="...">
@@ -129,6 +130,22 @@
                     <p class="card-text">Rocket League</p>
                 </div>
             </div> 
+            <div class = "card" style= "width: 22rem;">
+                <img src="https://upload.wikimedia.org/wikipedia/en/thumb/d/de/Hollow_Knight_2026_cover_art.jpg/250px-Hollow_Knight_2026_cover_art.jpg?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail"
+                    class="card-img-top" alt="...">
+                <div class="card-body">
+                    <p class="card-text">Hollow Knight</p>
+                </div>
+            </div> 
+
+             <div class = "card" style= "width: 22rem;">
+                <img src="https://cdng.europosters.eu/pod_public/1300/284896.jpg"
+                    class="card-img-top" alt="...">
+                <div class="card-body">
+                    <p class="card-text">Hollow Knight Silksong</p>
+                </div>
+            </div> 
+
     </div>
 
 
@@ -137,6 +154,7 @@
 
         <p> PlayRoute : Derechos Reservados 2026 &copy;</p>
     </footer>
+    <script src="PlayRoute.js"></script>
 </body>
 
 </html>
