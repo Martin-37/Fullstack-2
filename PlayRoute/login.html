@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar sesión · PlayRoute</title>
+    <link rel="stylesheet" href="css/index.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <script src="js/componentes.js"></script>
+</head>
+
+<body>
+    <header>
+        <div id="navbar"></div>
+    </header>
+
+    <main class="login-main">
+        <div class="login-card">
+            <div class="text-center mb-4">
+                <h1 class="h3 mb-1">Iniciar sesión</h1>
+                <p class="text-muted mb-0" style="font-size: 0.9rem;">
+                    Es opcional: puedes seguir viendo el catálogo sin una cuenta.
+                </p>
+            </div>
+
+            <div id="mensajeLogin" class="alert alert-danger py-2 d-none" role="alert"></div>
+
+            <form id="formLogin" novalidate>
+                <div class="mb-3">
+                    <label for="correo" class="form-label">Correo electrónico</label>
+                    <input type="email" class="form-control" id="correo" placeholder="nombre@correo.com" required>
+                    <div class="invalid-feedback">Ingresa un correo válido.</div>
+                </div>
+
+                <div class="mb-2">
+                    <label for="contrasena" class="form-label">Contraseña</label>
+                    <div class="input-group">
+                        <input type="password" class="form-control" id="contrasena" placeholder="Tu contraseña"
+                            minlength="6" required>
+                        <span class="input-group-text toggle-password" id="togglePassword">
+                            <i class="bi bi-eye"></i>
+                        </span>
+                        <div class="invalid-feedback">La contraseña debe tener al menos 6 caracteres.</div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="recordarme">
+                        <label class="form-check-label" for="recordarme" style="font-size: 0.9rem;">
+                            Recordarme
+                        </label>
+                    </div>
+                    <a href="#" class="link-secondary" style="font-size: 0.9rem;">¿Olvidaste tu contraseña?</a>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100">Iniciar sesión</button>
+            </form>
+
+            <div class="login-divider">o</div>
+
+            <a href="index.html" class="btn btn-invitado w-100 mb-3">
+                Continuar como invitado
+            </a>
+
+            <p class="text-center mb-0" style="font-size: 0.9rem;">
+                ¿No tienes cuenta? <a href="#">Regístrate</a>
+            </p>
+        </div>
+    </main>
+
+    <footer>
+        <p> PlayRoute : Derechos Reservados 2026 &copy;</p>
+    </footer>
+
+    <script>
+        const formLogin = document.querySelector("#formLogin");
+        const mensajeLogin = document.querySelector("#mensajeLogin");
+        const togglePassword = document.querySelector("#togglePassword");
+        const inputContrasena = document.querySelector("#contrasena");
+
+        togglePassword.addEventListener("click", () => {
+            const esPassword = inputContrasena.type === "password";
+            inputContrasena.type = esPassword ? "text" : "password";
+            togglePassword.innerHTML = esPassword
+                ? '<i class="bi bi-eye-slash"></i>'
+                : '<i class="bi bi-eye"></i>';
+        });
+
+        formLogin.addEventListener("submit", (evento) => {
+            evento.preventDefault();
+            mensajeLogin.classList.add("d-none");
+
+            if (!formLogin.checkValidity()) {
+                formLogin.classList.add("was-validated");
+                return;
+            }
+
+            // Punto de conexión con el backend de autenticación cuando esté disponible.
+            mensajeLogin.classList.remove("d-none", "alert-danger");
+            mensajeLogin.classList.add("alert-success");
+            mensajeLogin.textContent = "Inicio de sesión simulado correctamente. Conecta este formulario a tu API cuando esté lista.";
+        });
+    </script>
+</body>
+
+</html>
