@@ -14,12 +14,10 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    background-color: #fdf8ff!important;
-
-
+    background-color: #fdf8ff !important;
 }
 .navbar{
-  background-color: #000000;
+  background-color: #1b1b1b;
   color: #fdf8ff ;
 }
 .texto{
@@ -35,8 +33,9 @@ footer{
 header {
     margin-left: 0%;
     margin-right: 0%;
-    position: relative;
-    background-color: rgba(111, 173, 235, 0.893);
+    position: sticky;
+    top: 0;
+    Z-index: 1000;
     border-radius: 3px;
 }
 
@@ -45,6 +44,7 @@ width: 100%;
 height: 400px;
 object-fit: cover;
 }
+
 .imagenes {
 display: flex;
 justify-content: flex-start;
@@ -53,3 +53,32 @@ flex-wrap: wrap;
 margin: 20px;
 }
 
+.card {
+  position: relative; /* para poder posicionar el corazón encima */
+}
+
+.btn-favorito {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: rgba(255, 255, 255, 0.85);
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.1rem;
+  color: #888;
+  transition: transform 0.15s ease;
+}
+
+.btn-favorito:hover {
+  transform: scale(1.1);
+}
+
+.btn-favorito.activo {
+  color: #e63950; /* rojo cuando está marcado como favorito */
+}
