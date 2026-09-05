@@ -72,16 +72,8 @@ const juegos = [
   },
 ];
 
-const contenedor = document.querySelector("#contenedorJuegos");
-const cantidad = document.querySelector("#cantidadJuegos");
-const botonVerFavoritos = document.querySelector("#verFavoritos");
-
 // Guarda los ids de favoritos en localStorage (persisten aunque se recargue la pagina)
 let favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
-
-// Controla que lista se esta mostrando en este momento: todos los juegos o solo favoritos
-let mostrandoFavoritos = false;
-let listaActual = juegos;
 
 function esFavorito(id) {
   return favoritos.includes(id);
@@ -100,22 +92,8 @@ function obtenerJuegosFavoritos() {
   return juegos.filter((juego) => esFavorito(juego.id));
 }
 
-function renderProductos(lista) {
-  listaActual = lista;
-  contenedor.innerHTML = "";
-
-  if (lista.length === 0) {
-    contenedor.innerHTML = `
-      <div class="col-12 text-center text-muted py-5">
-        <i class="bi bi-heart" style="font-size: 2rem;"></i>
-        <p class="mt-2">Todavia no agregaste juegos a favoritos.</p>
-      </div>`;
-    cantidad.textContent = `0 juegos`;
-    return;
-  }
-
-  lista.forEach((juego) => {
-    contenedor.innerHTML += `
+function tarjetaJuego(juego) {
+  return `
    <div class="col-sm-6 col-lg-4"> 
         <article class="card h-100 shadow-sm"> 
           <img src="${juego.imagen}" class="card-img-top" alt="${juego.nombre}" style="width:100%;height:auto;object-fit:cover;"> 
@@ -129,35 +107,74 @@ function renderProductos(lista) {
           </div> 
         </article> 
       </div>`;
-  });
-  cantidad.textContent = `${lista.length} juegos`;
 }
 
-function actualizarVista() {
-  if (mostrandoFavoritos) {
-    renderProductos(obtenerJuegosFavoritos());
-  } else {
-    renderProductos(juegos);
+/* ---------- Pagina principal (index.html) ---------- */
+const contenedor = document.querySelector("#contenedorJuegos");
+
+if (contenedor) {
+  const cantidad = document.querySelector("#cantidadJuegos");
+
+  // El index siempre muestra todos los juegos. Para ver solo los favoritos
+  // ahora se usa el link "Favoritos" del navbar, que lleva a favorito.html.
+  function renderProductos(lista) {
+    contenedor.innerHTML = "";
+
+    lista.forEach((juego) => {
+      contenedor.innerHTML += tarjetaJuego(juego);
+    });
+    cantidad.textContent = `${lista.length} juegos`;
   }
+
+  renderProductos(juegos);
+
+  // Click sobre el corazon: agrega/saca de favoritos y refresca la tarjeta
+  contenedor.addEventListener("click", (evento) => {
+    const boton = evento.target.closest(".btn-favorito");
+    if (!boton) return;
+
+    const id = Number(boton.dataset.id);
+    toggleFavorito(id);
+    renderProductos(juegos);
+  });
 }
 
-renderProductos(juegos);
+/* ---------- Pagina de favoritos (favorito.html) ---------- */
+const contenedorFavoritos = document.querySelector("#contenedorFavoritos");
 
-// Click sobre el corazon: agrega/saca de favoritos
-contenedor.addEventListener("click", (evento) => {
-  const boton = evento.target.closest(".btn-favorito");
-  if (!boton) return;
+if (contenedorFavoritos) {
+  const cantidadFavoritos = document.querySelector("#cantidadFavoritos");
 
-  const id = Number(boton.dataset.id);
-  toggleFavorito(id);
-  actualizarVista();
-});
+  function renderFavoritos() {
+    const lista = obtenerJuegosFavoritos();
+    contenedorFavoritos.innerHTML = "";
 
-// Click en "Ver favoritos": alterna entre ver todos los juegos y ver solo el carrito de favoritos
-botonVerFavoritos.addEventListener("click", () => {
-  mostrandoFavoritos = !mostrandoFavoritos;
-  botonVerFavoritos.textContent = mostrandoFavoritos
-    ? "Ver todos los juegos"
-    : "Ver favoritos";
-  actualizarVista();
-});
+    if (lista.length === 0) {
+      contenedorFavoritos.innerHTML = `
+        <div class="col-12 text-center text-muted py-5">
+          <i class="bi bi-heart" style="font-size: 2.5rem;"></i>
+          <p class="mt-3">Todavia no agregaste juegos a favoritos.</p>
+          <a href="index.html" class="btn btn-outline-primary btn-sm">Explorar juegos</a>
+        </div>`;
+      if (cantidadFavoritos) cantidadFavoritos.textContent = "0 juegos";
+      return;
+    }
+
+    lista.forEach((juego) => {
+      contenedorFavoritos.innerHTML += tarjetaJuego(juego);
+    });
+    if (cantidadFavoritos) cantidadFavoritos.textContent = `${lista.length} juegos`;
+  }
+
+  // Click sobre el corazon: saca el juego de favoritos y vuelve a dibujar la lista
+  contenedorFavoritos.addEventListener("click", (evento) => {
+    const boton = evento.target.closest(".btn-favorito");
+    if (!boton) return;
+
+    const id = Number(boton.dataset.id);
+    toggleFavorito(id);
+    renderFavoritos();
+  });
+
+  renderFavoritos();
+}

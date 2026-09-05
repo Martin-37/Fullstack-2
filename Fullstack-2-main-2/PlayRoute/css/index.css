@@ -30,6 +30,11 @@ footer{
     margin-top: 0;
   
 }
+/*esto hacer que el main sea flexible*/
+main {
+    flex: 1 0 auto;
+}
+
 header {
     margin-left: 0%;
     margin-right: 0%;
