@@ -22,10 +22,10 @@ function cargarNavbar(){
                                 Categorias
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item " href="#">Acción</a></li>
-                                <li><a class="dropdown-item " href="#">Aventura</a></li>
-                                <li><a class = "dropdown-item " href="#">Estrategia</a></li>
-                                <li><a class = "dropdown-item" href="#">Terror</a></li>
+                                <li><a class="dropdown-item " href="Accion.html">Acción</a></li>
+                                <li><a class="dropdown-item " href="Aventura.html">Aventura</a></li>
+                                <li><a class = "dropdown-item " href="Estrategia.html">Estrategia</a></li>
+                                <li><a class = "dropdown-item" href="Terror.html">Terror</a></li>
 
                                 <li>
                                     <hr class="dropdown-divider">
