@@ -1,1 +1,38 @@
 <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Favorito</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+</head>
+<body>
+    <!--barra de navegacion-->
+    <div id="navbar"></div>
+    <main class="container my-5">
+        <!-- Encabezado de la Sección -->
+        <div class="row mb-4 align-items-center">
+            <div class="col">
+                <h2 class="fw-bold"><i class="bi bi-heart-fill text-danger me-2"></i>Mis Favoritos</h2>
+                <p class="text-muted mb-0">Gestiona los elementos que has guardado.</p>
+            </div>
+            <div class="col-auto">
+                <span id="cantidadFavoritos" class="badge text-bg-primary"></span>
+            </div>
+        </div>
+
+        <!-- Cuadrícula de Favoritos: se llena dinamicamente desde js/listaJuegos.js -->
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" id="contenedorFavoritos"></div>
+    </main>
+
+    <footer>
+        <div id="footer"></div>
+    </footer>
+
+    <script src="js/componentes.js"></script>
+    <script src="js/listaJuegos.js"></script>
+</body>
+</html>
