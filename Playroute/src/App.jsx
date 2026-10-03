@@ -6,6 +6,8 @@ import Inicio from "./Pages/Inicio";
 import Favoritos from "./Pages/Favoritos";
 import Categoria from "./Pages/Categoria";
 import Footer from "./Components/Footer";
+import Contacto from "./Pages/Contacto";
+import Login from "./Pages/Login";
 
 import { juegos } from "./Data/Juegos";
 
@@ -40,6 +42,17 @@ function App() {
                     path="/categoria/:nombre"
                     element={<Categoria />}
                 />
+
+               <Route
+                    path="/contacto"
+                    element={<Contacto />}
+                />
+
+                 <Route
+                    path="/login"
+                    element={<Login/>}
+                />
+
 
             </Routes>
 
