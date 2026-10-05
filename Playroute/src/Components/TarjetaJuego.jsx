@@ -1,6 +1,7 @@
+
 import { useState } from "react";
 
-function TarjetaJuego({ juego }) {
+function TarjetaJuego({ juego, onQuitarFavorito }) {
 
     const [favorito, setFavorito] = useState(() => {
 
@@ -10,31 +11,41 @@ function TarjetaJuego({ juego }) {
         return favoritos.includes(juego.id);
     });
 
-    function cambiarFavorito() {
 
-        let favoritos =
-            JSON.parse(localStorage.getItem("favoritos")) || [];
+function cambiarFavorito() {
 
-        if (favoritos.includes(juego.id)) {
+    let favoritos =
+        JSON.parse(localStorage.getItem("favoritos")) || [];
 
-            favoritos = favoritos.filter(
-                (id) => id !== juego.id
-            );
+    if (favoritos.includes(juego.id)) {
 
-            setFavorito(false);
+        // Quitar de favoritos
+        favoritos = favoritos.filter(
+            (id) => id !== juego.id
+        );
 
-        } else {
+        setFavorito(false);
 
-            favoritos.push(juego.id);
-
-            setFavorito(true);
+        // Actualiza la lista de Favoritos.jsx
+        if (onQuitarFavorito) {
+            onQuitarFavorito(juego.id);
         }
 
-        localStorage.setItem(
-            "favoritos",
-            JSON.stringify(favoritos)
-        );
+    } else {
+
+        // Agregar a favoritos
+        favoritos.push(juego.id);
+
+        setFavorito(true);
     }
+
+    localStorage.setItem(
+        "favoritos",
+        JSON.stringify(favoritos)
+    );
+}
+
+
 
     return (
         <div className="tarjeta-juego">
@@ -50,9 +61,8 @@ function TarjetaJuego({ juego }) {
                     />
 
                     <button
-                        className={`btn-favorito ${
-                            favorito ? "activo" : ""
-                        }`}
+                        className={`btn-favorito ${favorito ? "activo" : ""
+                            }`}
                         onClick={cambiarFavorito}
                         type="button"
                     >

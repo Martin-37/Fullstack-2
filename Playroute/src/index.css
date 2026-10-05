@@ -222,6 +222,30 @@ html, body,#root {
     margin-top: 20px;
 }
 
+.login-card form {
+    text-align: left;
+}
+
+.registro-card {
+    width: 100%;
+    max-width: 450px;
+    padding: 30px;
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+.registro-card form {
+    text-align: left;
+}
+.registro-main{ 
+    min-height: 100vh;
+    padding: 30px 40px;
+    margin: 0;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
 
 
 

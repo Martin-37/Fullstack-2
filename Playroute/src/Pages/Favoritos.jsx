@@ -1,28 +1,44 @@
+
+import { useState } from "react";
+
 import { juegos } from "../Data/Juegos";
 import TarjetaJuego from "../Components/TarjetaJuego";
 
 function Favoritos() {
 
-    const favoritos =
-        JSON.parse(localStorage.getItem("favoritos")) || [];
+    const [juegosFavoritos, setJuegosFavoritos] = useState(() => {
 
-    const juegosFavoritos = juegos.filter((juego) =>
-        favoritos.includes(juego.id)
-    );
+        const favoritos =
+            JSON.parse(localStorage.getItem("favoritos")) || [];
+
+        return juegos.filter((juego) =>
+            favoritos.includes(juego.id)
+        );
+    });
+
+    function quitarFavorito(id) {
+
+        setJuegosFavoritos((juegosActuales) =>
+            juegosActuales.filter((juego) => juego.id !== id)
+        );
+    }
 
     return (
         <main>
 
-            <h1 className = "titulo-favoritos">Mis favoritos</h1>
+            <h1 className="titulo-favoritos">
+                Mis favoritos
+            </h1>
+
             <div className="encabezado-juegos">
 
-            <h1 className="titulo-juegos mb-0">
-            Juegos 
-             </h1>
+                <h1 className="titulo-juegos mb-0">
+                    Juegos
+                </h1>
 
-            <span className="badge text-bg-primary">
-            {juegosFavoritos.length} juegos
-            </span>
+                <span className="badge text-bg-primary">
+                    {juegosFavoritos.length} juegos
+                </span>
 
             </div>
 
@@ -53,10 +69,13 @@ function Favoritos() {
                 <div className="contenedor-juegos">
 
                     {juegosFavoritos.map((juego) => (
+
                         <TarjetaJuego
                             key={juego.id}
                             juego={juego}
+                            onQuitarFavorito={quitarFavorito}
                         />
+
                     ))}
 
                 </div>
@@ -68,3 +87,4 @@ function Favoritos() {
 }
 
 export default Favoritos;
+

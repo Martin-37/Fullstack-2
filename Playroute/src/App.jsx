@@ -8,8 +8,9 @@ import Categoria from "./Pages/Categoria";
 import Footer from "./Components/Footer";
 import Contacto from "./Pages/Contacto";
 import Login from "./Pages/Login";
-
 import { juegos } from "./Data/Juegos";
+import Registro from "./Pages/Registro";
+
 
 function App() {
 
@@ -43,15 +44,22 @@ function App() {
                     element={<Categoria />}
                 />
 
-               <Route
+                <Route
                     path="/contacto"
                     element={<Contacto />}
                 />
 
-                 <Route
+                <Route
                     path="/login"
-                    element={<Login/>}
+                    element={<Login />}
                 />
+
+            
+                    <Route path="/" element={<Inicio juegosMostrados={juegosMostrados} />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/favoritos" element={<Favoritos />} />
+                    <Route path="/registro" element={<Registro />} />
+                
 
 
             </Routes>
