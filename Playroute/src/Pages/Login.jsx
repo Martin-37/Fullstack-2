@@ -81,9 +81,9 @@ function Login() {
     }
 
     return (
-        <main className="login-main">
+        <main className="loginusuario-main">
 
-            <div className="login-card">
+            <div className="loginusuario-card">
 
                 <div className="text-center mb-4">
 

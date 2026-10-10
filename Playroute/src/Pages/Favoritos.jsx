@@ -4,17 +4,21 @@ import { useState } from "react";
 import { juegos } from "../Data/Juegos";
 import TarjetaJuego from "../Components/TarjetaJuego";
 
-function Favoritos() {
+function Favoritos(
+    {juegos}
+) {
 
-    const [juegosFavoritos, setJuegosFavoritos] = useState(() => {
+    const favoritosGuardados = JSON.parse(
+    localStorage.getItem("favoritos") || "[]"
+);
 
-        const favoritos =
-            JSON.parse(localStorage.getItem("favoritos")) || [];
+const juegosFavoritos = juegos.filter((juego) =>
+    favoritosGuardados.some(
+        (id) => String(id) === String(juego.id)
+    )
+);
 
-        return juegos.filter((juego) =>
-            favoritos.includes(juego.id)
-        );
-    });
+ 
 
     function quitarFavorito(id) {
 
