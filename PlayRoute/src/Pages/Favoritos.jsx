@@ -1,28 +1,39 @@
-import { juegos } from "../Data/Juegos";
+import { useState } from "react";
+
+import { useJuegos } from "../Context/JuegosContext";
 import TarjetaJuego from "../Components/TarjetaJuego";
 
 function Favoritos() {
 
-    const favoritos =
-        JSON.parse(localStorage.getItem("favoritos")) || [];
+    const { juegos } = useJuegos();
 
-    const juegosFavoritos = juegos.filter((juego) =>
-        favoritos.includes(juego.id)
+    // Guardamos solo los ids; la lista se calcula con los juegos actuales
+    const [ids, setIds] = useState(
+        () => JSON.parse(localStorage.getItem("favoritos")) || []
     );
+
+    const juegosFavoritos = juegos.filter((juego) => ids.includes(juego.id));
+
+    function quitarFavorito(id) {
+        setIds((actuales) => actuales.filter((i) => i !== id));
+    }
 
     return (
         <main>
 
-            <h1 className = "titulo-favoritos">Mis favoritos</h1>
+            <h1 className="titulo-favoritos">
+                Mis favoritos
+            </h1>
+
             <div className="encabezado-juegos">
 
-            <h1 className="titulo-juegos mb-0">
-            Juegos 
-             </h1>
+                <h1 className="titulo-juegos mb-0">
+                    Juegos
+                </h1>
 
-            <span className="badge text-bg-primary">
-            {juegosFavoritos.length} juegos
-            </span>
+                <span className="badge text-bg-primary">
+                    {juegosFavoritos.length} juegos
+                </span>
 
             </div>
 
@@ -53,10 +64,13 @@ function Favoritos() {
                 <div className="contenedor-juegos">
 
                     {juegosFavoritos.map((juego) => (
+
                         <TarjetaJuego
                             key={juego.id}
                             juego={juego}
+                            onQuitarFavorito={quitarFavorito}
                         />
+
                     ))}
 
                 </div>

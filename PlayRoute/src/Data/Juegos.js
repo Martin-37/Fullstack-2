@@ -82,7 +82,7 @@ export const juegos = [
     nombre:"Five Nights at Freddy's",
     min_desc:"Juego de terror y supervivencia, en el que el objetivo es sobrevivir a los ataques de los animatronicos de la pizzeria Freddy Fazbear's Pizza",
     categoria:"Terror, Supervivencia",
-    imagen:"  ",
+    imagen:"https://i.3djuegos.com/juegos/11837/five_nights_at_freddy__039_s/fotos/ficha/five_nights_at_freddy__039_s-5025238.jpg",
   },
   {
     id: 13,
