@@ -1,51 +1,43 @@
-
 import { useState } from "react";
+import { useJuegos } from "../Context/JuegosContext";
+import { puede } from "../Utlis/sesion";
+import FormularioJuego from "./FormularioJuego";
 
 function TarjetaJuego({ juego, onQuitarFavorito }) {
+    const { editarJuego, eliminarJuego } = useJuegos();
+    const [editando, setEditando] = useState(false);
 
     const [favorito, setFavorito] = useState(() => {
-
-        const favoritos =
-            JSON.parse(localStorage.getItem("favoritos")) || [];
-
+        const favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
         return favoritos.includes(juego.id);
     });
 
+    function cambiarFavorito() {
+        let favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
 
-function cambiarFavorito() {
+        if (favoritos.includes(juego.id)) {
+            // Quitar de favoritos
+            favoritos = favoritos.filter((id) => id !== juego.id);
+            setFavorito(false);
 
-    let favoritos =
-        JSON.parse(localStorage.getItem("favoritos")) || [];
-
-    if (favoritos.includes(juego.id)) {
-
-        // Quitar de favoritos
-        favoritos = favoritos.filter(
-            (id) => id !== juego.id
-        );
-
-        setFavorito(false);
-
-        // Actualiza la lista de Favoritos.jsx
-        if (onQuitarFavorito) {
-            onQuitarFavorito(juego.id);
+            // Actualiza la lista de Favoritos.jsx
+            if (onQuitarFavorito) {
+                onQuitarFavorito(juego.id);
+            }
+        } else {
+            // Agregar a favoritos
+            favoritos.push(juego.id);
+            setFavorito(true);
         }
 
-    } else {
-
-        // Agregar a favoritos
-        favoritos.push(juego.id);
-
-        setFavorito(true);
+        localStorage.setItem("favoritos", JSON.stringify(favoritos));
     }
 
-    localStorage.setItem(
-        "favoritos",
-        JSON.stringify(favoritos)
-    );
-}
-
-
+    function eliminar() {
+        if (window.confirm(`¿Eliminar "${juego.nombre}"?`)) {
+            eliminarJuego(juego.id);
+        }
+    }
 
     return (
         <div className="tarjeta-juego">
@@ -61,8 +53,7 @@ function cambiarFavorito() {
                     />
 
                     <button
-                        className={`btn-favorito ${favorito ? "activo" : ""
-                            }`}
+                        className={`btn-favorito ${favorito ? "activo" : ""}`}
                         onClick={cambiarFavorito}
                         type="button"
                     >
@@ -85,9 +76,41 @@ function cambiarFavorito() {
                         {juego.min_desc}
                     </p>
 
+                    {/* Solo el administrador ve estos botones */}
+                    {(puede("editar") || puede("eliminar")) && (
+                        <div className="d-flex gap-2 mt-auto">
+                            {puede("editar") && (
+                                <button
+                                    type="button"
+                                    className="btn btn-sm btn-outline-primary"
+                                    onClick={() => setEditando(true)}
+                                >
+                                    Editar
+                                </button>
+                            )}
+                            {puede("eliminar") && (
+                                <button
+                                    type="button"
+                                    className="btn btn-sm btn-outline-danger"
+                                    onClick={eliminar}
+                                >
+                                    Eliminar
+                                </button>
+                            )}
+                        </div>
+                    )}
+
                 </div>
 
             </article>
+
+            {editando && (
+                <FormularioJuego
+                    juego={juego}
+                    onGuardar={(datos) => editarJuego(juego.id, datos)}
+                    onCerrar={() => setEditando(false)}
+                />
+            )}
 
         </div>
     );

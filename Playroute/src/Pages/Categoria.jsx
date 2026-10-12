@@ -1,9 +1,11 @@
-
 import { useParams } from "react-router-dom";
+import { useJuegos } from "../Context/JuegosContext";
 import TarjetaJuego from "../Components/TarjetaJuego";
 
-function Categoria({ juegos }) {
+function Categoria() {
+
     const { nombre } = useParams();
+    const { juegos } = useJuegos();
 
     const juegosCategoria = juegos.filter((juego) =>
         juego.categoria
@@ -16,6 +18,7 @@ function Categoria({ juegos }) {
 
     return (
         <main>
+
             <h1 className="titulo-categoria">
                 {categoriaMayuscula}
             </h1>
@@ -25,6 +28,7 @@ function Categoria({ juegos }) {
             </p>
 
             <div className="encabezado-juegos">
+
                 <h1 className="titulo-juegos mb-0">
                     Juegos
                 </h1>
@@ -32,16 +36,20 @@ function Categoria({ juegos }) {
                 <span className="badge text-bg-primary">
                     {juegosCategoria.length} juegos
                 </span>
+
             </div>
 
             <div className="contenedor-juegos">
+
                 {juegosCategoria.map((juego) => (
                     <TarjetaJuego
                         key={juego.id}
                         juego={juego}
                     />
                 ))}
+
             </div>
+
         </main>
     );
 }
