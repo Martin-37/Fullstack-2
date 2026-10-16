@@ -11,10 +11,10 @@ function cargarNavbar(){
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link active " aria-current="page" href="index.html"> Inicio </a>
+                            <a class="nav-link  " aria-current="page" href="index.html"> Inicio </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link " href="#"> Juegos </a>
+                            <a class="nav-link " href="index.html#juegos"> Juegos </a>
                         </li>
                         <li class="nav-item dropdown ">
                             <a class="nav-link dropdown-toggle texto" href="#" role="button" data-bs-toggle="dropdown"
@@ -22,15 +22,15 @@ function cargarNavbar(){
                                 Categorias
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item " href="#">Acción</a></li>
-                                <li><a class="dropdown-item " href="#">Aventura</a></li>
-                                <li><a class = "dropdown-item " href="#">Estrategia</a></li>
-                                <li><a class = "dropdown-item" href="#">Terror</a></li>
+                                <li><a class="dropdown-item " href="Accion.html" onclick="filtrarCategoria('Acción')">Acción</a></li>
+                                <li><a class="dropdown-item " href="Aventura.html" onclick="filtrarCategoria('Aventura')">Aventura</a></li>
+                                <li><a class = "dropdown-item " href="Estrategia.html" onclick="filtrarCategoria('Estrategia')">Estrategia</a></li>
+                                <li><a class = "dropdown-item" href="Terror.html" onclick="filtrarCategoria('Terror')">Terror</a></li>
 
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
-                                <li><a class="dropdown-item" href="#">Otros</a></li>
+                                <li><a class="dropdown-item" href="Otros.html" onclick="filtrarCategoria('Otros')">Otros</a></li>
                             </ul>
                         </li>
                         <li class="nav-item">
@@ -40,8 +40,14 @@ function cargarNavbar(){
                             <a class="nav-link " href="favorito.html">Favoritos</a>
                         </li>
                     </ul>
-                    <form class="d-flex" role="search">
-                        <input class="form-control me-2" type="search" placeholder="Buscar..." aria-label="Search" />
+                    <form id="formBuscar" class="d-flex" role="search">
+                    <input 
+                            id="buscador"
+                            class="form-control me-2" 
+                            type="search" 
+                            placeholder="Buscar..." 
+                            aria-label="Search"
+                            />
                         <button class="btn btn-outline-success" type="submit">Buscar</button>
                     </form>
                     <a href="login.html" class="btn btn-outline-light ms-lg-3 mt-2 mt-lg-0 d-flex align-items-center gap-1 texto-boton-login">
@@ -53,19 +59,19 @@ function cargarNavbar(){
         marcarPaginaActual();
 
     function marcarPaginaActual() {
-    const paginaActual = window.location.pathname.split("/").pop() || "index.html";
+        const paginaActual = window.location.pathname.split("/").pop() || "index.html";
 
-    const enlaces = document.querySelectorAll("#navbar .nav-link");
+        const enlaces = document.querySelectorAll("#navbar .nav-link");
 
-    enlaces.forEach(enlace => {
-        const paginaEnlace = enlace.getAttribute("href");
+        enlaces.forEach(enlace => {
+            const paginaEnlace = enlace.getAttribute("href");
 
-        if (paginaEnlace === paginaActual) {
+            if (paginaEnlace === paginaActual) {
             enlace.classList.add("active");
             enlace.setAttribute("aria-current", "page");
-        }
-    });
-}
+            }
+        });
+    }
 }
 
 function cargarFooter(){
@@ -101,5 +107,35 @@ function cargarFooter(){
     `;
     
 }
+function activarJuegosAlBajar() {
+    const seccionJuegos = document.querySelector("#juegos");
+    const enlaceJuegos = document.querySelector('#navbar a[href="index.html#juegos"]');
+    const enlaceInicio = document.querySelector('#navbar a[href="index.html"]');
+
+    if (!seccionJuegos || !enlaceJuegos || !enlaceInicio) return;
+
+    window.addEventListener("scroll", () => {
+        const posicion = seccionJuegos.getBoundingClientRect();
+
+        if (posicion.top <= 200) {
+            // Activar Juegos
+            enlaceJuegos.classList.add("active");
+            enlaceJuegos.setAttribute("aria-current", "page");
+
+            // Desactivar Inicio
+            enlaceInicio.classList.remove("active");
+            enlaceInicio.removeAttribute("aria-current");
+        } else {
+            // Activar Inicio
+            enlaceInicio.classList.add("active");
+            enlaceInicio.setAttribute("aria-current", "page");
+
+            // Desactivar Juegos
+            enlaceJuegos.classList.remove("active");
+            enlaceJuegos.removeAttribute("aria-current");
+        }
+    });
+}
 cargarNavbar()
 cargarFooter()
+activarJuegosAlBajar()
