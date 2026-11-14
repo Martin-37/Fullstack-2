@@ -1,0 +1,6 @@
+spring:
+  datasource:
+    url: ${DB_FAVORITOS_URL:jdbc:mysql://localhost:3306/playroute_favoritos?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&characterEncoding=UTF-8}
+    username: ${DB_FAVORITOS_USER:pr_favoritos}
+    password: ${DB_FAVORITOS_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver

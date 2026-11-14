@@ -1,0 +1,189 @@
+name: playroute
+
+# Produccion de laboratorio: 3 Spring Boot + gateway + 3 MySQL + React/Nginx.
+# Solo frontend (:3000) y gateway (:8080) se publican en el equipo local.
+services:
+  db-usuarios:
+    image: mysql:8.4
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?Define MYSQL_ROOT_PASSWORD en .env}
+      MYSQL_DATABASE: playroute_usuarios
+      MYSQL_USER: pr_usuarios
+      MYSQL_PASSWORD: ${DB_USUARIOS_PASSWORD:?Define DB_USUARIOS_PASSWORD en .env}
+    volumes:
+      - db_usuarios:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u root -p$$MYSQL_ROOT_PASSWORD --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 15
+      start_period: 40s
+    networks: [interno]
+
+  db-catalogo:
+    image: mysql:8.4
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?Define MYSQL_ROOT_PASSWORD en .env}
+      MYSQL_DATABASE: playroute_catalogo
+      MYSQL_USER: pr_catalogo
+      MYSQL_PASSWORD: ${DB_CATALOGO_PASSWORD:?Define DB_CATALOGO_PASSWORD en .env}
+    volumes:
+      - db_catalogo:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u root -p$$MYSQL_ROOT_PASSWORD --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 15
+      start_period: 40s
+    networks: [interno]
+
+  db-favoritos:
+    image: mysql:8.4
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?Define MYSQL_ROOT_PASSWORD en .env}
+      MYSQL_DATABASE: playroute_favoritos
+      MYSQL_USER: pr_favoritos
+      MYSQL_PASSWORD: ${DB_FAVORITOS_PASSWORD:?Define DB_FAVORITOS_PASSWORD en .env}
+    volumes:
+      - db_favoritos:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u root -p$$MYSQL_ROOT_PASSWORD --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 15
+      start_period: 40s
+    networks: [interno]
+
+  usuarios:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      args: { MODULE: Usuarios }
+    restart: unless-stopped
+    environment:
+      PORT: '8081'
+      SPRING_PROFILES_ACTIVE: mysql
+      DB_USUARIOS_URL: jdbc:mysql://db-usuarios:3306/playroute_usuarios?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&characterEncoding=UTF-8
+      DB_USUARIOS_USER: pr_usuarios
+      DB_USUARIOS_PASSWORD: ${DB_USUARIOS_PASSWORD:?Define DB_USUARIOS_PASSWORD en .env}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:?Define ADMIN_PASSWORD en .env}
+      MIEMBRO_PASSWORD: ${MIEMBRO_PASSWORD:?Define MIEMBRO_PASSWORD en .env}
+      KEYS_DIRECTORY: /app/data/keys
+      FRONTEND_ORIGINS: ${FRONTEND_ORIGINS:-http://localhost:3000,http://localhost:5173}
+      COOKIE_SECURE: 'false'
+      GATEWAY_URL: http://gateway:8080
+      CATALOGO_URL: http://catalogo:8082
+      JAVA_TOOL_OPTIONS: '-Xms64m -Xmx384m'
+    volumes:
+      - auth_keys:/app/data
+    depends_on:
+      db-usuarios: { condition: service_healthy }
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "--silent", "http://localhost:8081/actuator/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 12
+      start_period: 75s
+    networks: [interno]
+
+  catalogo:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      args: { MODULE: Catalogo }
+    restart: unless-stopped
+    environment:
+      PORT: '8082'
+      SPRING_PROFILES_ACTIVE: mysql
+      DB_CATALOGO_URL: jdbc:mysql://db-catalogo:3306/playroute_catalogo?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&characterEncoding=UTF-8
+      DB_CATALOGO_USER: pr_catalogo
+      DB_CATALOGO_PASSWORD: ${DB_CATALOGO_PASSWORD:?Define DB_CATALOGO_PASSWORD en .env}
+      AUTH_JWKS_URL: http://usuarios:8081/api/auth/jwks
+      JAVA_TOOL_OPTIONS: '-Xms64m -Xmx384m'
+    depends_on:
+      db-catalogo: { condition: service_healthy }
+      usuarios: { condition: service_healthy }
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "--silent", "http://localhost:8082/actuator/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 12
+      start_period: 75s
+    networks: [interno]
+
+  favoritos:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      args: { MODULE: Favoritos }
+    restart: unless-stopped
+    environment:
+      PORT: '8083'
+      SPRING_PROFILES_ACTIVE: mysql
+      DB_FAVORITOS_URL: jdbc:mysql://db-favoritos:3306/playroute_favoritos?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&characterEncoding=UTF-8
+      DB_FAVORITOS_USER: pr_favoritos
+      DB_FAVORITOS_PASSWORD: ${DB_FAVORITOS_PASSWORD:?Define DB_FAVORITOS_PASSWORD en .env}
+      AUTH_JWKS_URL: http://usuarios:8081/api/auth/jwks
+      CATALOGO_URL: http://catalogo:8082
+      JAVA_TOOL_OPTIONS: '-Xms64m -Xmx384m'
+    depends_on:
+      db-favoritos: { condition: service_healthy }
+      usuarios: { condition: service_healthy }
+      catalogo: { condition: service_healthy }
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "--silent", "http://localhost:8083/actuator/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 12
+      start_period: 75s
+    networks: [interno]
+
+  gateway:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      args: { MODULE: Gateway }
+    restart: unless-stopped
+    environment:
+      PORT: '8080'
+      USUARIOS_URL: http://usuarios:8081
+      CATALOGO_URL: http://catalogo:8082
+      FAVORITOS_URL: http://favoritos:8083
+      FRONTEND_ORIGINS: ${FRONTEND_ORIGINS:-http://localhost:3000,http://localhost:5173}
+      JAVA_TOOL_OPTIONS: '-Xms64m -Xmx256m'
+    ports:
+      - '127.0.0.1:8080:8080'
+    depends_on:
+      usuarios: { condition: service_healthy }
+      catalogo: { condition: service_healthy }
+      favoritos: { condition: service_healthy }
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "--silent", "http://localhost:8080/actuator/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 12
+      start_period: 75s
+    networks: [interno]
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - '127.0.0.1:${FRONTEND_PORT:-3000}:80'
+    depends_on:
+      gateway: { condition: service_healthy }
+    networks: [interno]
+
+networks:
+  interno: { driver: bridge }
+
+volumes:
+  db_usuarios:
+  db_catalogo:
+  db_favoritos:
+  auth_keys:
