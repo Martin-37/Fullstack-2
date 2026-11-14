@@ -1,0 +1,24 @@
+server:
+  port: ${PORT:8080}
+spring:
+  application:
+    name: gateway
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+springdoc:
+  swagger-ui:
+    urls:
+      - name: Usuarios y autenticación
+        url: /openapi/usuarios
+      - name: Administrador y Juegos
+        url: /openapi/administrador
+      - name: Favoritos
+        url: /openapi/favoritos
+app:
+  usuarios-url: ${USUARIOS_URL:http://localhost:8081}
+  catalogo-url: ${ADMINISTRADOR_URL:http://localhost:8082}
+  pedidos-url: ${FAVORITOS_URL:http://localhost:8083}
+  allowed-origins: ${FRONTEND_ORIGINS:http://localhost:5173,http://127.0.0.1:5173}

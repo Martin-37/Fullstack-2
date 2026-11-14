@@ -1,0 +1,28 @@
+server:
+  port: ${PORT:8081}
+spring:
+  application:
+    name: usuarios
+  profiles:
+    default: h2
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+app:
+  issuer: ${JWT_ISSUER:gametech-usuarios}
+  jwks: ${AUTH_JWKS_URL:http://localhost:8081/api/auth/jwks}
+  gateway-url: ${GATEWAY_URL:http://localhost:8080}
+  catalogo-url: ${CATALOGO_URL:http://localhost:8082}
+  internal-key: ${INTERNAL_API_KEY:local-cambiar-clave-interna-32-caracteres}
+  allowed-origins: ${FRONTEND_ORIGINS:http://localhost:5173,http://127.0.0.1:5173}
+  admin-password: ${ADMIN_PASSWORD:Admin1234!}
+  cliente-password: ${CLIENTE_PASSWORD:Cliente1234!}
+  keys-directory: ${KEYS_DIRECTORY:./data/keys}
+  cookie-secure: ${COOKIE_SECURE:false}
+  access-seconds: ${ACCESS_TOKEN_SECONDS:900}
