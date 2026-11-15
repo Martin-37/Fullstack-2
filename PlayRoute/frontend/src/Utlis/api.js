@@ -1,5 +1,5 @@
 /** API única: Vite redirige /api hacia el Gateway (puerto 8080). */
-const BASE = "/api";
+const BASE = "https://184-197-215-204.sslip.io/api";
 let renovacion = null;
 
 async function renovar() {
