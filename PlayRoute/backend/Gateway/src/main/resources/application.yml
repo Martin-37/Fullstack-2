@@ -1,0 +1,27 @@
+server:
+  port: ${PORT:8080}
+spring:
+  application:
+    name: gateway
+  main:
+    web-application-type: reactive
+app:
+  usuarios-url: ${USUARIOS_URL:http://localhost:8081}
+  catalogo-url: ${CATALOGO_URL:http://localhost:8082}
+  favoritos-url: ${FAVORITOS_URL:http://localhost:8083}
+  allowed-origins: ${FRONTEND_ORIGINS:http://localhost:5173,http://127.0.0.1:5173}
+springdoc:
+  swagger-ui:
+    urls:
+      - name: Usuarios
+        url: /openapi/usuarios
+      - name: Catálogo
+        url: /openapi/catalogo
+      - name: Favoritos
+        url: /openapi/favoritos
+    urls-primary-name: Usuarios
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info

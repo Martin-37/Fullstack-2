@@ -1,0 +1,6 @@
+spring:
+  datasource:
+    url: ${DB_CATALOGO_URL:jdbc:mysql://localhost:3306/playroute_catalogo?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&characterEncoding=UTF-8}
+    username: ${DB_CATALOGO_USER:pr_catalogo}
+    password: ${DB_CATALOGO_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver

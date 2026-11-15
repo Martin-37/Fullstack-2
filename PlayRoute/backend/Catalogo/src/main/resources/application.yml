@@ -1,0 +1,19 @@
+server:
+  port: ${PORT:8082}
+spring:
+  application:
+    name: catalogo
+  profiles:
+    default: h2
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
+app:
+  issuer: ${JWT_ISSUER:playroute-usuarios}
+  jwks: ${AUTH_JWKS_URL:http://localhost:8081/api/auth/jwks}
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
