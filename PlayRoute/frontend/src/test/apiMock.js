@@ -49,11 +49,12 @@ export function instalarApiMock() {
       }
       return responder({ message: 'Correo o contraseña incorrectos.' }, 401);
     }
+    if (ruta === '/api/auth/me' && metodo === 'GET') return responder({ id: 2, nombre: 'Usuario de prueba', correo: 'user@playroute.com', rol: 'MIEMBRO' });
     if (ruta === '/api/auth/registro') return responder({id: 3, ...body, contrasena: undefined}, 201);
     if (ruta === '/api/auth/logout') return responder(null, 204);
     if (ruta === '/api/auth/refresh') return responder({ accessToken: 'token-prueba' });
     return responder({message: `Ruta no simulada: ${ruta}`}, 404);
   });
   vi.stubGlobal('fetch', fetchMock);
-  return { fetchMock, getJuegos: () => juegos, getFavoritos: () => favoritos };
+  return { fetchMock, getJuegos: () => juegos, getFavoritos: () => favoritos, setFavoritos: (ids) => { favoritos = [...ids]; } };
 }

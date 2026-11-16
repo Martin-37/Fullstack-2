@@ -278,14 +278,16 @@ function Navbar({ juegos, setJuegosMostrados }) {
                         </a>
                     ) : (
                         <>
-                            <img
-                                src="/login.jpg"
-                                alt="Mi perfil"
-                                className="rounded-circle me-2"
-                                width="38"
-                                height="38"
-                                style={{ objectFit: "cover", backgroundColor: "white" }}
-                            />
+                            <Link to="/perfil" className="d-inline-flex me-2" aria-label="Abrir mi perfil" title="Mi perfil">
+                                <img
+                                    src="/login.jpg"
+                                    alt="Mi perfil"
+                                    className="rounded-circle"
+                                    width="38"
+                                    height="38"
+                                    style={{ objectFit: "cover", backgroundColor: "white" }}
+                                />
+                            </Link>
 
                             {rol === "admin" && (
                                 <Link to="/admin" className="btn btn-outline-info btn-sm me-2" aria-label="Abrir panel de administración">

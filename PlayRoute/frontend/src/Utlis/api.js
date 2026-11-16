@@ -1,5 +1,5 @@
-/** API única: Vite redirige /api hacia el Gateway (puerto 8080). */
-const BASE = "https://184-197-215-204.sslip.io/api";
+/** Local: /api usa el proxy de Vite o Nginx. Para S3 se define VITE_API_BASE_URL al compilar. */
+const BASE = import.meta.env.VITE_API_BASE_URL || "/api";
 let renovacion = null;
 
 async function renovar() {

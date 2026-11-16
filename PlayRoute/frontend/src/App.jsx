@@ -10,7 +10,9 @@ import Contacto from "./Pages/Contacto";
 import Login from "./Pages/Login";
 import Registro from "./Pages/Registro";
 import PanelAdmin from "./Pages/Admin/PanelAdmin";
+import Perfil from "./Pages/Perfil";
 import RutaAdmin from "./Components/RutaAdmin";
+import RutaPrivada from "./Components/RutaPrivada";
 import { useJuegos } from "./Context/JuegosContext";
 
 function App() {
@@ -40,6 +42,7 @@ function App() {
                 <Route path="/contacto" element={<Contacto />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/registro" element={<Registro />} />
+                <Route path="/perfil" element={<RutaPrivada><Perfil /></RutaPrivada>} />
                 <Route path="/admin" element={<RutaAdmin><PanelAdmin /></RutaAdmin>} />
             </Routes>
 
