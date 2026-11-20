@@ -1,0 +1,251 @@
+:root {
+  --text: #6b6375;
+  --text-h: #08060d;
+  --bg: #fff;
+  --border: #e5e4e7;
+  --code-bg: #f4f3ec;
+  --accent: #08060d;
+  --accent-bg: rgba(170, 59, 255, 0.1);
+  --accent-border: rgba(170, 59, 255, 0.5);
+  --social-bg: rgba(244, 243, 236, 0.5);
+  --shadow:
+    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+
+  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --mono: ui-monospace, Consolas, monospace;
+
+  font: 18px/145% var(--sans);
+  letter-spacing: 0.18px;
+  color-scheme: light dark;
+  color: var(--text);
+  background: var(--bg);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  @media (max-width: 1024px) {
+    font-size: 16px;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text: #9ca3af;
+    --text-h: #f3f4f6;
+    --border: #2e303a;
+    --code-bg: #1f2028;
+    --accent: #08060d;
+    --accent-bg: rgba(192, 132, 252, 0.15);
+    --accent-border: rgba(192, 132, 252, 0.5);
+    --social-bg: rgba(47, 48, 58, 0.5);
+    --shadow:
+      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
+
+   
+  }
+
+  #social .button-icon {
+    filter: invert(1) brightness(2);
+  }
+}
+
+body {
+  margin: 0;
+}
+
+#root {
+  width: 1126px;
+  max-width: 100%;
+  margin: 0 auto;
+  text-align: center;
+  border-inline: 1px solid var(--border);
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+p {
+  margin: 0;
+}
+
+.contenedor-juegos {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+.imagen-juego {
+    display: block;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+}
+.navbar-playroute {
+    background-color: #070C26;
+}
+.navbar-playroute {
+    background-color: #070C26;
+}
+
+.navbar-playroute .navbar-brand,
+.navbar-playroute .nav-link {
+    color: white;
+}
+
+.navbar-playroute .nav-link:hover {
+    color: #e5e4e7;
+}
+code,
+.counter {
+  font-family: var(--mono);
+  display: inline-flex;
+  border-radius: 4px;
+  color: var(--text-h);
+}
+
+code {
+  font-size: 15px;
+  line-height: 135%;
+  padding: 4px 8px;
+  background: var(--code-bg);
+}
+@media (max-width: 768px) {
+    .contenedor-juegos {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 500px) {
+    .contenedor-juegos {
+        grid-template-columns: 1fr;
+    }
+}
+.contenedor-imagen {
+    position: relative;
+}
+
+.btn-favorito {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+
+    width: 40px;
+    height: 40px;
+
+    border: none;
+    border-radius: 50%;
+
+    background-color: white;
+    color: #777;
+
+    font-size: 22px;
+
+    cursor: pointer;
+}
+
+.btn-favorito.activo {
+    color: darkred;
+}
+.hero h1 {
+    font-size: 60px;
+    color: var(--accent);
+    
+}
+.container h2{
+    font-size: 20px;
+    color : var(--accent);
+}
+
+input[type="search"]::-webkit-search-cancel-button {
+    opacity: 1;
+    filter: brightness(0);
+}
+
+.encabezado-juegos {
+    width: 100%;
+    max-width: 1000px;
+    margin: 20px auto 24px;
+    padding: 0;
+    
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.encabezado-juegos {
+    margin-top: 10px;
+}
+.titulo-favoritos{
+    margin-top: 20px;
+    margin-bottom: 24px;
+    color: var(--accent);
+    line-height: 1.2;
+    font-size: 50px;
+    font-weight: 500;
+    --accent: #10288C;
+}
+
+
+
+.login-main {
+    min-height: 100vh;
+    padding: 30px 40px;
+    margin: 0;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+.login-card {
+    width: 100%;
+    max-width: 450px;
+    padding: 30px;
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+*{
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+}
+html, body,#root {
+    height: 100%;
+    width: 100%;
+}
+
+.titulo-categoria{
+    margin-top: 20px;
+}
+
+.login-card form {
+    text-align: left;
+}
+
+.registro-card {
+    width: 100%;
+    max-width: 450px;
+    padding: 30px;
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+.registro-card form {
+    text-align: left;
+}
+.registro-main{ 
+    min-height: 100vh;
+    padding: 30px 40px;
+    margin: 0;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+
+
+
